@@ -4,11 +4,13 @@ namespace App\Services\Interfaces;
 
 interface ProductServiceInterface
 {
-    public function createProduct(array $payload): mixed;
-    public function updateProduct(int $id, mixed $payload): mixed;
-    public function deleteProduct(int $id): mixed;
-    public function getProducts(mixed $filterQuery): mixed;
-    public function getProductById(int $id): mixed;
-    public function getProductBySlug(string $slug): mixed;
-    public function getPublishedProducts(): mixed;
+    public function createProduct($payload);
+    public function updateProduct($id, $payload);
+    public function deleteProduct($id);
+    public function getProducts($filterQuery);
+    public function getProductById($id);
+    public function getProductBySlug($slug);
+    public function getPublishedProducts();
+    public function getDraftProducts();
+    public function publishProduct($id);
 }

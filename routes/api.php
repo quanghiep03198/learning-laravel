@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\AllFilterExceptions;
+use App\Http\Middleware\CheckAdminMiddleware;
+use App\Http\Middleware\CheckAuthMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,20 +21,27 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('', function (Request $req) {
-    $url = $req->fullUrl();
-
-
-    return response()->json([
+Route::get("/", function (Request $request) {
+    $url = $request->fullUrl();
+    return response()->apiResponse([
         "messages" => "Server is running on: $url",
     ]);
-})->name('welcome');
+})->name("welcome");
 
-Route::prefix('auth')->group(function () {
-    Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+Route::middleware([AllFilterExceptions::class])->prefix("auth")->group(function () {
+    Route::post("/login", [AuthController::class, "login"])->name("auth.login");
+    Route::post("/logout", [AuthController::class, "logout"])->name("auth.logout");
 });
-Route::post('/register', [UserController::class, 'register'])->name('user.register');
 
-Route::prefix('product')->middleware()->group(function(){
-    Route::get('/published', [])
+Route::prefix("user")->group(function () {
+    Route::post("/register", [UserController::class, "register"])->name("user.register");
+});
+
+Route::middleware([CheckAuthMiddleware::class, CheckAdminMiddleware::class, AllFilterExceptions::class])->prefix("products")->group(function () {
+    Route::get("/published", [ProductController::class, "getPublishedProducts"])->withoutMiddleware([CheckAuthMiddleware::class, CheckAdminMiddleware::class])->name("products.get_published");
+    Route::get("/draft", [ProductController::class, "getDraftProducts"])->name("products.get_draft");
+    Route::post("/create", [ProductController::class, "createProduct"])->name("product.create");
+    Route::patch("/{id}/update", [ProductController::class, "updateProduct"])->name("product.update");
+    Route::patch("/{id}/publish", [ProductController::class, "publishProduct"])->name("product.publish");
+    Route::delete("/{id}/delete", [ProductController::class, "deleteProduct"])->name("product.delete");
 });

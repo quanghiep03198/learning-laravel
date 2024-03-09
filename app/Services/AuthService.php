@@ -31,4 +31,8 @@ class AuthService implements AuthServiceInterface
 
         return $foundUser;
     }
+
+    protected function createToken($payload){
+        
+    }
 }

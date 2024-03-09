@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Repositories\Base\IBaseRepository;
+use App\Repositories\Base\BaseRespositoryInterface;
 
-interface IUserRepository extends IBaseRepository
+interface UserRepositoryInterface extends BaseRespositoryInterface
 {
     public function createUser($payload);
     public function findOneByEmail(string $email);

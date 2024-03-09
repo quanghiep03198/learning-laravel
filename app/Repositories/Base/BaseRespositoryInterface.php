@@ -2,11 +2,13 @@
 
 namespace App\Repositories\Base;
 
-interface IBaseRepository
+interface BaseRespositoryInterface
+
 {
-    public function createOne($payload): mixed;
-    public function updateOne($id, $update): mixed;
-    public function deleteOne($id): mixed;
-    public function findOne($filterQuery): mixed;
-    public function findWithFilter($filterQuery): mixed;
+    public function createOne($payload);
+    public function updateOneById($id, $update);
+    public function deleteOneById($id);
+    public function findOneById($id);
+    public function findOne($filterQuery);
+    public function findWithFilter($filterQuery);
 }

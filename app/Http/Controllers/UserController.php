@@ -13,14 +13,14 @@ class UserController extends Controller
     {
     }
 
-    public function register(Request $req)
+    public function register(Request $request)
     {
         try {
-            $payload = $req->all();
+            $payload = $request->all();
             $newUser = $this->userService->createNewUser($payload);
-            return response()->json($newUser);
+            return response()->apiResponse($newUser);
         } catch (Exception $e) {
-            return response()->json([
+            return response()->apiResponse([
                 "messsage" => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

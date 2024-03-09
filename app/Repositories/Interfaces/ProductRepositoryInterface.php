@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Repositories\Base\IBaseRepository;
+use App\Repositories\Base\BaseRespositoryInterface;
 
-interface ProductRepositoryInterface extends IBaseRepository
+interface ProductRepositoryInterface extends BaseRespositoryInterface
 {
-    public function findOneBySlug(string $slug): mixed;
+    public function findOneBySlug($slug);
 }

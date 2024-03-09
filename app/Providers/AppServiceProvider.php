@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Repositories\Interfaces\IUserRepository;
 use App\Repositories\Interfaces\ProductRepositoryInterface;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 use App\Services\AuthService;
@@ -11,6 +11,7 @@ use App\Services\Interfaces\AuthServiceInterface;
 use App\Services\Interfaces\ProductServiceInterface;
 use App\Services\ProductService;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,7 +30,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        JsonResource::withoutWrapping();
+        Response::macro('apiResponse', function ($data, $message = 'Success', $status = 200) {
+            return Response::json([
+                'data' => $data,
+                'message' => $message,
+                'status' => $status
+            ], $status);
+        });
     }
 
     /**
@@ -42,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
     }
     public function registerRepository()
     {
-        $this->app->singleton(IUserRepository::class, UserRepository::class);
+        $this->app->singleton(UserRepositoryInterface::class, UserRepository::class);
         $this->app->singleton(ProductRepositoryInterface::class, ProductRepository::class);
     }
 }

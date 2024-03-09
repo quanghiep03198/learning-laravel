@@ -17,27 +17,35 @@ class ProductRepository extends BaseAbstractRepository implements ProductReposit
         return  $this->productModel->create($payload);
     }
 
-    public function updateOne($id,  $payload)
+    public function updateOneById($id,  $payload)
     {
-        return $this->productModel->all()->where('id', '=', $id)->updateOne($payload);
+        $productToUpdate  = $this->productModel->find($id);
+        $productToUpdate->update($payload);
+
+        return $productToUpdate;
     }
 
-    public function deleteOne($id): mixed
+    public function deleteOneById($id)
     {
         return $this->productModel->where('id', '=', $id)->delete();
     }
 
-    public function findWithFilter($filterQuery = []): mixed
+    public function findWithFilter($filterQuery)
     {
-        return $this->productModel->whereRaw()->get();
+        return $this->productModel->whereRaw($filterQuery)->get();
     }
 
-    public function findOne($filterQuery): mixed
+    public function findOneById($id)
+    {
+        return $this->productModel->find($id);
+    }
+    
+    public function findOne($filterQuery)
     {
         return $this->productModel->whereRaw($filterQuery)->first();
     }
 
-    public function findOneBySlug(string $slug): mixed
+    public function findOneBySlug($slug)
     {
         return $this->productModel->whereRaw('slug = ?', [$slug])->get();
     }
