@@ -21,12 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get("/", function (Request $request) {
-    $url = $request->fullUrl();
-    return response()->apiResponse([
-        "messages" => "Server is running on: $url",
-    ]);
-})->name("welcome");
+
 
 Route::middleware([AllFilterExceptions::class])->prefix("auth")->group(function () {
     Route::post("/login", [AuthController::class, "login"])->name("auth.login");
@@ -35,6 +30,7 @@ Route::middleware([AllFilterExceptions::class])->prefix("auth")->group(function 
 
 Route::prefix("user")->group(function () {
     Route::post("/register", [UserController::class, "register"])->name("user.register");
+    Route::get("/profile", [UserController::class, "getProfile"])->middleware([CheckAuthMiddleware::class])->name("user.getProfile");
 });
 
 Route::middleware([CheckAuthMiddleware::class, CheckAdminMiddleware::class, AllFilterExceptions::class])->prefix("products")->group(function () {

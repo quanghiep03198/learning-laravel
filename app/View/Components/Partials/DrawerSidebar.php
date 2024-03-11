@@ -1,21 +1,19 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Partials;
 
-use App\Models\User;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class UserList extends Component
+class DrawerSidebar extends Component
 {
-    public $data;
     /**
      * Create a new component instance.
      */
-    public function __construct($data)
+    public function __construct()
     {
-        $this->data = $data;
+        //
     }
 
     /**
@@ -23,7 +21,6 @@ class UserList extends Component
      */
     public function render(): View|Closure|string
     {
-       
-        return view('components.user-list');
+        return view('components.partials.drawer-sidebar');
     }
 }

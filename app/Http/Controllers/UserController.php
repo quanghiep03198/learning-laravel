@@ -6,6 +6,7 @@ use App\Services\UserService;
 use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -24,5 +25,10 @@ class UserController extends Controller
                 "messsage" => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function getProfile()
+    {
+        return response()->apiResponse(Auth::user(), "Ok", Response::HTTP_OK);
     }
 }

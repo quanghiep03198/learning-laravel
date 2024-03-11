@@ -13,7 +13,7 @@ class AuthMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $requestuest, Closure $next): Response
+    public function handle(Request $request, Closure $next): Response
     {
         return $next($request);
     }

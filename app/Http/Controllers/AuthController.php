@@ -16,12 +16,19 @@ class AuthController extends Controller
 {
     public function __construct(protected AuthServiceInterface $authService)
     {
-        $this->middleware('a', ['except' => ['login']]);
+        $this->middleware('api', ['except' => ['login']]);
     }
 
-    public function login(Request $request): JsonResponse
+
+    public function index()
+    {
+        return view('pages.login.page');
+    }
+
+    public function login(Request $request)
     {
         try {
+
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email',
                 'password' => 'required|string'
@@ -39,12 +46,9 @@ class AuthController extends Controller
                 throw new UnauthorizedHttpException('Unauthorized');
 
 
-            return $this->respondWithToken($token);
+            return redirect()->route('dashboard');
         } catch (HttpException $e) {
-            return response()->apiResponse([
-                "message" => $e->getMessage(),
-                "status_code" => $e->getStatusCode()
-            ], $e->getMessage(), $e->getStatusCode() ?? 500);
+            return redirect()->route('login');
         }
     }
 
@@ -58,9 +62,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function getProfile()
-    {
-    }
+
     /**
      * Get the token array structure.
      *
@@ -76,5 +78,11 @@ class AuthController extends Controller
             'expires_in' => Auth::factory()->getTTL() * 60,
             'user' => Auth::user()
         ], "Ok", Response::HTTP_CREATED);
+    }
+
+
+    public function refreshToken()
+    {
+        return $this->respondWithToken(Auth::refresh());
     }
 }

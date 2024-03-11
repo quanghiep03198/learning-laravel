@@ -1,10 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,10 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::prefix('v1/api')->group(function () {
-//     Route::prefix('auth')->group(function(){
-//         Route::post('/login', [AuthController::class, 'login']);
-//     });
-//     Route::post('/register', [UserController::class, 'register']);
-    
-// });
+Route::get("/", function () {
+    return view('layouts.app-layout');
+})->name('home');
+Route::get("*", function () {
+    return redirect('/404');
+});
+Route::get('/404', function () {
+    return view('pages.404.page');
+});
+Route::get('/login', function () {
+    return view('pages.login.page');
+})->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/dashboard', function () {
+    return view('pages.dashboard.page');
+})->name('dashboard');
